@@ -1,0 +1,126 @@
+### =========================
+### HEALTH CHECK
+### =========================
+GET http://localhost:5000/health
+
+
+### =========================
+### USERS
+### =========================
+
+### Create user
+POST http://localhost:5000/api/users
+Content-Type: application/json
+
+{
+  "name": "Onasis",
+  "email": "onasis@example.com",
+  "password": "Password123!",
+  "role": "ADMIN"
+}
+
+
+### Get all users
+GET http://localhost:5000/api/users
+
+
+### Get user by ID
+GET http://localhost:5000/api/users/1
+
+
+### Update user
+PATCH http://localhost:5000/api/users/1
+Content-Type: application/json
+
+{
+  "name": "Onasis Updated",
+  "role": "STAFF"
+}
+
+
+### Delete user
+DELETE http://localhost:5000/api/users/1
+
+
+
+### =========================
+### MENU
+### =========================
+
+### Create menu category (if you have category routes)
+POST http://localhost:5000/api/menu
+Content-Type: application/json
+
+{
+  "name": "Kabobs",
+  "description": "Fresh grilled kabobs"
+}
+
+
+### Get menu
+GET http://localhost:5000/api/menu
+
+
+
+### =========================
+### ORDERS
+### =========================
+
+### Create order (guest checkout)
+POST http://localhost:5000/api/orders
+Content-Type: application/json
+
+{
+  "customerName": "John Doe",
+  "customerPhone": "702-555-1234",
+  "items": [
+    {
+      "menuItemId": 1,
+      "quantity": 2
+    },
+    {
+      "menuItemId": 3,
+      "quantity": 1
+    }
+  ]
+}
+
+
+### Get all orders
+GET http://localhost:5000/api/orders
+
+
+### =========================
+### AUTH – REGISTER
+### =========================
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Onasis",
+  "email": "onasis@example.com",
+  "password": "Password123!",
+  "role": "ADMIN"
+}
+
+
+### =========================
+### AUTH – LOGIN
+### =========================
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "onasis@example.com",
+  "password": "Password123!"
+}
+
+
+### =========================
+### AUTH – ME (Protected)
+### =========================
+# Copy the token from register/login and paste it below
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NzkwOTIyOCwiZXhwIjoxNzY4NTE0MDI4fQ.sv-N7biRXYfvm9meqxOXV_haB8Kt7FUT4SdM_IbCzug
+GET http://localhost:5000/api/auth/me
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+

@@ -70,7 +70,7 @@ export async function createUser(req, res, next) {
             data: {
                 name, 
                 email,
-                passwordHash,
+                password: passwordHash,
                 role: role ?? undefined, // uses default CUSTOMER if not provided
             },
             select : userSafeSelect,
