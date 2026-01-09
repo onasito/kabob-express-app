@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 //import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
@@ -22,6 +23,7 @@ app.get('/health', (req, res) => {
 //app.use("/api/menu", menuRoutes);
 //app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 //app.use(notFound);
 //app.use(errorHandler);
