@@ -19,8 +19,6 @@ model MenuCategory {
   items     MenuItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-
-  @@map("menu_category")
 }
 
 model MenuItem {
@@ -39,8 +37,6 @@ model MenuItem {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("menu_item")
 }
 
 model Order {
@@ -56,8 +52,6 @@ model Order {
   items     OrderItem[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-
-  @@map("order")
 }
 
 model OrderItem {
@@ -68,8 +62,6 @@ model OrderItem {
   orderId    Int
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
   menuItemId Int
-
-  @@map("order_item")
 }
 
 model User {
