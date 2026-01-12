@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import menuRoutes from './routes/menuRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 //import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
@@ -21,11 +22,10 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
-//app.use("/api/menu", menuRoutes);
-//app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/menu", menuRoutes);
+app.use("/api/orders", orderRoutes);
 
 //app.use(notFound);
 //app.use(errorHandler);
