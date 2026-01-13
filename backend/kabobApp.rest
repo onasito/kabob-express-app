@@ -126,7 +126,19 @@ Content-Type: application/json
   "description": "Premium beef skewers with peppers and onions",
   "price": 14.99,
   "isAvailable": true,
-  "categoryId": 1
+  "categoryId": 2
+}
+
+### Create menu item - Rice Pilaf
+POST http://localhost:5000/api/menu/items
+Content-Type: application/json
+
+{
+  "name": "Rice Pilaf",
+  "description": "Fluffy rice cooked with herbs and spices",
+  "price": 4.99,
+  "isAvailable": true,
+  "categoryId": 5
 }
 
 
@@ -139,7 +151,7 @@ Content-Type: application/json
   "description": "Creamy chickpea dip with pita bread",
   "price": 6.99,
   "isAvailable": true,
-  "categoryId": 2
+  "categoryId": 5
 }
 
 
@@ -152,7 +164,7 @@ Content-Type: application/json
   "description": "Coke, Sprite, or Fanta",
   "price": 2.50,
   "isAvailable": true,
-  "categoryId": 2
+  "categoryId": 4
 }
 
 
@@ -193,7 +205,7 @@ DELETE http://localhost:5000/api/menu/items/4
 ### ORDERS
 ### =========================
 
-### Create order (guest checkout)
+### Create order (guest checkout - no userId)
 POST http://localhost:5000/api/orders
 Content-Type: application/json
 
@@ -213,8 +225,118 @@ Content-Type: application/json
 }
 
 
+### Create order (with userId - logged in user)
+POST http://localhost:5000/api/orders
+Content-Type: application/json
+
+{
+  "customerName": "Jane Smith",
+  "customerPhone": "702-555-5678",
+  "userId": 1,
+  "items": [
+    {
+      "menuItemId": 1,
+      "quantity": 1
+    },
+    {
+      "menuItemId": 2,
+      "quantity": 2
+    },
+    {
+      "menuItemId": 3,
+      "quantity": 1
+    }
+  ]
+}
+
+
 ### Get all orders
 GET http://localhost:5000/api/orders
+
+
+### Get all orders filtered by status (PENDING)
+GET http://localhost:5000/api/orders?status=PENDING
+
+
+### Get all orders filtered by status (COMPLETED)
+GET http://localhost:5000/api/orders?status=COMPLETED
+
+
+### Get all orders for a specific user
+GET http://localhost:5000/api/orders?userId=1
+
+
+### Get all PENDING orders for a specific user
+GET http://localhost:5000/api/orders?status=PENDING&userId=1
+
+
+### Get order by ID
+GET http://localhost:5000/api/orders/1
+
+
+### Get orders by user ID (alternative endpoint)
+GET http://localhost:5000/api/orders/user/1
+
+
+### Update order details
+PATCH http://localhost:5000/api/orders/1
+Content-Type: application/json
+
+{
+  "customerName": "John Doe Updated",
+  "customerPhone": "702-555-9999"
+}
+
+
+### Update order status to IN_PROGRESS
+PATCH http://localhost:5000/api/orders/1/status
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS"
+}
+
+
+### Update order status to READY
+PATCH http://localhost:5000/api/orders/1/status
+Content-Type: application/json
+
+{
+  "status": "READY"
+}
+
+
+### Update order status to COMPLETED
+PATCH http://localhost:5000/api/orders/1/status
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+
+### Update order status to CANCELLED
+PATCH http://localhost:5000/api/orders/1/status
+Content-Type: application/json
+
+{
+  "status": "CANCELLED"
+}
+
+
+### Update order (including status in main update)
+PATCH http://localhost:5000/api/orders/1
+Content-Type: application/json
+
+{
+  "customerName": "John Doe",
+  "customerPhone": "702-555-1234",
+  "status": "READY"
+}
+
+
+### Delete order
+DELETE http://localhost:5000/api/orders/1
 
 
 ### =========================
