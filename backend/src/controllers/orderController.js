@@ -131,6 +131,8 @@ export async function createOrder(req, res, next) {
         customerPhone: customerPhone || null,
         userId: userId ? Number(userId) : null,
         totalPrice: totalPrice,
+        // Items only contains the data for the item on the order
+        // like orderId and menuItemId but not the details of the menu item itself
         items: {
           create: orderItemsData,
         },
@@ -143,6 +145,7 @@ export async function createOrder(req, res, next) {
             email: true,
           },
         },
+        // adds the menuItems details in the response
         items: {
           include: {
             menuItem: true,
