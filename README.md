@@ -74,6 +74,78 @@ This project showcases real-world development skills including API design, datab
 
 ---
 
+## 🛠️ **Getting Started**
+
+### Prerequisites
+- Node.js (v18 or higher)
+- PostgreSQL
+- Expo Go app (for mobile testing)
+
+### Backend Setup
+
+1. Navigate to backend directory:
+```bash
+cd backend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up environment variables (create `.env` file):
+```bash
+DATABASE_URL="postgresql://user:password@localhost:5432/kabob_express"
+JWT_SECRET="your-secret-key"
+PORT=5000
+```
+
+4. Run database migrations:
+```bash
+npx prisma migrate dev
+```
+
+5. Start the server:
+```bash
+npm run dev
+```
+
+The API will be available at `http://localhost:5000/api`
+
+### Mobile App Setup
+
+1. Navigate to mobile directory:
+```bash
+cd mobile
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create `.env` file (copy from `.env.example`):
+```bash
+cp .env.example .env
+```
+
+4. Configure your backend URL in `.env`:
+```bash
+# Find your IP using: ipconfig (Windows) or ifconfig (Mac/Linux)
+EXPO_PUBLIC_API_URL=http://YOUR_IP_ADDRESS:5000/api
+```
+
+5. Start Expo:
+```bash
+npm start
+```
+
+6. Scan QR code with Expo Go app or press `a` for Android emulator / `i` for iOS simulator
+
+See [mobile/README.md](mobile/README.md) for detailed mobile setup instructions.
+
+---
+
 ## 🎯 **Project Goals**
 
 * Build a production-ready restaurant ordering platform
