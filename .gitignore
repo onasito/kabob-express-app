@@ -1,0 +1,12 @@
+# Claude Code temporary files
+tmpclaude-*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
