@@ -1,20 +1,22 @@
 # ⭐ **Kabob Express App — Full-Stack Restaurant Ordering Platform**
 
-A full-stack mobile ordering system built for a local restaurant, designed to give customers a smooth, modern way to browse the menu, place orders, and track their order status. The platform includes a React Native mobile app (iOS/Android) and a Node.js/Express backend powered by PostgreSQL and Prisma ORM.
+A full-stack restaurant ordering system built for a local restaurant, designed to give customers a smooth, modern way to browse the menu, place orders, and track their order status. The platform includes a React web frontend and a Node.js/Express backend powered by PostgreSQL and Prisma ORM.
 
-This project showcases real-world development skills including API design, database modeling, mobile UI/UX, authentication, secure data handling, and deployment.
+This project showcases real-world development skills including API design, database modeling, web UI/UX, authentication, secure data handling, and deployment.
+
+> **Note**: This project initially included a React Native mobile app (see `mobile/` directory), but development is currently focused on the React web frontend. The mobile app code is kept for future reference and potential multi-platform expansion.
 
 ---
 
 ## 🚀 **Key Features**
 
-### **Customer Mobile App (React Native + Expo)**
+### **Customer Web App (React)**
 
 * Browse menu categories and items
 * Add items to cart & customize quantities
 * Submit pickup or dine-in orders
 * View real-time order status
-* Clean, mobile-first UI optimized for restaurants
+* Clean, responsive UI optimized for restaurants
 
 ### **Backend API (Node.js + Express + PostgreSQL)**
 
