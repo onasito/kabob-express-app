@@ -1,3 +1,7 @@
+/**
+ * API Configuration
+ * This file creates an axios instance configured to communicate with the backend.
+ */
 import axios from 'axios';
 
 // Get API URL from environment variables
