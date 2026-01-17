@@ -55,6 +55,7 @@ function App() {
   return (
     <div className="container">
       <h1>Kabob Express Menu</h1>
+      <p className="welcome-text">Fresh, authentic kabobs made with love!</p>
       <div className="menu-grid">
         {menuItems.map((item) => (
           <div key={item.id} className="menu-item">
