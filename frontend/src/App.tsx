@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import menuService, { type MenuItem, type MenuCategory } from './services/menuService'
+import menuService, { type MenuCategory } from './services/menuService'
 
 function App() {
   // State to hold our data
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<MenuCategory[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -20,12 +19,7 @@ function App() {
     try {
       setLoading(true)
       setError(null)
-      // Fetch both items and categories at the same time
-      const [items, cats] = await Promise.all([
-        menuService.getItems(),
-        menuService.getCategories()
-      ])
-      setMenuItems(items)
+      const cats = await menuService.getCategories()
       setCategories(cats)
     } catch (err: any) {
       setError(err.message || 'Failed to load menu')
@@ -35,12 +29,7 @@ function App() {
     }
   }
 
-  // Filter menu items based on selected category
-  const filteredItems = selectedCategory
-    ? menuItems.filter(item => item.categoryId === selectedCategory)
-    : menuItems
-
-  // Show loading state
+// Show loading state
   if (loading) {
     return (
       <div className="container">
@@ -69,38 +58,23 @@ function App() {
       <h1>Kabob Express Menu</h1>
       <p className="welcome-text">Fresh, authentic kabobs made with love!</p>
 
-      {/* Category filter buttons */}
-      <div className="category-filters">
-        <button
-          className={selectedCategory === null ? 'active' : ''}
-          onClick={() => setSelectedCategory(null)}
-        >
-          All
-        </button>
-        {categories.map((category) => (
-          <button
-            key={category.id}
-            className={selectedCategory === category.id ? 'active' : ''}
-            onClick={() => setSelectedCategory(category.id)}
-          >
-            {category.name}
-          </button>
-        ))}
-      </div>
-
-      {/* Menu items grid */}
-      <div className="menu-grid">
-        {filteredItems.map((item) => (
-          <div key={item.id} className="menu-item">
-            <h3>{item.name}</h3>
-            <p className="description">{item.description}</p>
-            <p className="price">${item.price}</p>
-            {!item.isAvailable && (
-              <p className="unavailable">Currently Unavailable</p>
-            )}
+      {categories.map((category) => (
+        <div key={category.id} className="category-section">
+          <h2 className="category-header">{category.name}</h2>
+          <div className="menu-grid">
+            {category.items?.map((item) => (
+              <div key={item.id} className="menu-item">
+                <h3>{item.name}</h3>
+                <p className="description">{item.description}</p>
+                <p className="price">${item.price}</p>
+                {!item.isAvailable && (
+                  <p className="unavailable">Currently Unavailable</p>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   )
 }
