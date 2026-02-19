@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import menuService, { type MenuCategory } from '../services/menuService'
+import { useCart } from '../context/CartContext'
 import './Menu.css'
 
 function Menu() {
+  const { addItem } = useCart()
   const [categories, setCategories] = useState<MenuCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -59,7 +61,11 @@ function Menu() {
                 <h3>{item.name}</h3>
                 <p className="description">{item.description}</p>
                 <p className="price">${parseFloat(item.price).toFixed(2)}</p>
-                {!item.isAvailable && (
+                {item.isAvailable ? (
+                  <button className="add-to-cart" onClick={() => addItem(item)}>
+                    Add to Cart
+                  </button>
+                ) : (
                   <p className="unavailable">Currently Unavailable</p>
                 )}
               </div>
