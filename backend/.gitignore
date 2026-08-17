@@ -1,47 +1,5 @@
-# Node modules
-node_modules/
-
-# Environment variables
+node_modules
+# Keep environment variables out of version control
 .env
-.env.local
-.env.development
-.env.production
-.env.test
-
-# Prisma
-.prisma/
-prisma/migrations/
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# OS/system files
-.DS_Store
-Thumbs.db
-
-# Temporary files
-.tmp/
-temp/
-*.tmp
-
-# Build output
-dist/
-build/
-
-# Editor folders
-.vscode/
-.idea/
-
-# Lockfiles (optional)
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
-
-# Expo or React Native (future mobile folder)
-.expo/
-.expo-shared/
 
 /src/generated/prisma
