@@ -1,13 +1,7 @@
-import express from 'express';
+import 'dotenv/config';
+import app from './app.js';
 
 const PORT = process.env.PORT || 5000;
-const app = express();
-
-app.use(express.json());
-
-app.get('/' ,(req, res) => {
-    res.send("Welcome to Kabob Express");
-});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
