@@ -1,0 +1,14 @@
+{
+  "region": "us-west-1",
+  "app": {
+    "name": "backend",
+    "root": "backend",
+    "framework": "bun",
+    "entry": "src/index.ts",
+    "httpPort": 3000,
+    "build": {
+      "command": "npm run build",
+      "outputDirectory": "."
+    }
+  }
+}
