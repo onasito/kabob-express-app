@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { email, z } from "zod";
 import bcrypt from "bcrypt"
 import { prisma } from "../lib/prisma.js";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "../generated/prisma/client.js";
 
 const userSafeSelect = {
   id: true,
@@ -12,6 +12,21 @@ const userSafeSelect = {
   createdAt: true,
   updatedAt: true,
 };
+
+function handleUserError(error: unknown, res: Response): void {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+        if (error.code === 'P2002') {
+            res.status(409).json({ message: "Email already in use" });
+            return;
+        }
+    }
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+}
 
 export async function createUser(req: Request, res: Response): Promise<void> {
     const userSchema = z.object({
@@ -32,6 +47,7 @@ export async function createUser(req: Request, res: Response): Promise<void> {
         const exists = await prisma.user.findUnique({ where: { email } });
         if (exists) {
             res.status(400).json({ message: "Email already in use" });
+            return;
         };
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,12 +59,12 @@ export async function createUser(req: Request, res: Response): Promise<void> {
                 password: hashedPassword,
                 role: role ?? undefined, // uses default CUSTOMER if not provided
             },
+            select: userSafeSelect,
         });
         res.status(201).json(newUser);
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Something went wrong" });
+        handleUserError(error, res);
     }
 }
 
@@ -57,17 +73,14 @@ export async function deleteUser(req: Request, res: Response): Promise<void> {
         const id = Number(req.params.id);
         if (!Number.isInteger(id)) {
             res.status(400).json({ message: "Invalid user ID" })
+            return;
         }
 
         await prisma.user.delete({ where: { id } });
         res.status(204).send;
 
     } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-            res.status(404).json({ message: "User not found" });
-            return;
-        }
-        throw error;
+        handleUserError(error, res);
     }
 }
 
@@ -83,7 +96,7 @@ export async function getUsers(req: Request, res: Response): Promise<void> {
         }
         res.json(users);
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong" });
+        handleUserError(error, res);
     }
 }
 
@@ -107,8 +120,7 @@ export async function getUserById(req: Request, res: Response): Promise<void> {
 
         res.json(user);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Something went wrong" });
+        handleUserError(error, res);
     }
 }
 
@@ -149,6 +161,7 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
         }
 
         const data: Prisma.UserUpdateInput = {
+            // name key is only given value if it is undefined otherwise data object never gets name (not even name = undefined)
             ...(name !== undefined && { name }),
             ...(email !== undefined && { email }),
             ...(password !== undefined && { password: await bcrypt.hash(password, 10) }),
@@ -163,7 +176,6 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
         res.json(updatedUser);
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Something went wrong" });
+        handleUserError(error, res);
     }
 }
