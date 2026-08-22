@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { email, z } from "zod";
+import { z } from "zod";
 import bcrypt from "bcrypt"
 import { prisma } from "../lib/prisma.js";
 import { Prisma } from "../generated/prisma/client.js";
@@ -13,7 +13,7 @@ const userSafeSelect = {
   updatedAt: true,
 };
 
-function handleUserError(error: unknown, res: Response): void {
+export default function handleUserError(error: unknown, res: Response): void {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
             res.status(404).json({ message: "User not found" });
@@ -26,23 +26,26 @@ function handleUserError(error: unknown, res: Response): void {
     }
     console.error(error);
     res.status(500).json({ message: "Something went wrong" });
+    return;
 }
 
 export async function createUser(req: Request, res: Response): Promise<void> {
     const userSchema = z.object({
         name: z.string(),
         email: z.email("Invalid email address"),
-        password: z.string().min(8)
+        password: z.string().min(8),
+        role: z.enum(["CUSTOMER", "ADMIN", "STAFF"]).optional()
     });
+
     try {
-        // pass req body through zod to make sure name, email, and password are valid
+        // pass req body through zod to make sure name, email, password, and role are valid
         const result = userSchema.safeParse(req.body);
         if(!result.success) {
             res.status(400).json({ message: result.error.issues[0]?.message });
             return;
         };
 
-        const {name, email, password, role} = req.body
+        const {name, email, password, role} = result.data
 
         const exists = await prisma.user.findUnique({ where: { email } });
         if (exists) {
@@ -57,7 +60,8 @@ export async function createUser(req: Request, res: Response): Promise<void> {
                 name,
                 email,
                 password: hashedPassword,
-                role: role ?? undefined, // uses default CUSTOMER if not provided
+                // key omitted entirely (not just undefined) so Prisma's default CUSTOMER applies
+                ...(role !== undefined && { role }),
             },
             select: userSafeSelect,
         });
