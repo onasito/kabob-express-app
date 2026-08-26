@@ -81,7 +81,7 @@ export async function updateItem(req: Request, res: Response): Promise<void> {
 
         const id = Number(req.params.id);
         if (!Number.isInteger(id)) {
-            res.status(400).json({  message: "Invalid user ID" });
+            res.status(400).json({  message: "Invalid item ID" });
             return;
         }
 
@@ -95,13 +95,73 @@ export async function updateItem(req: Request, res: Response): Promise<void> {
             ...(categoryId !== undefined && { categoryId }),
         }
 
-        const updatedItem = prisma.menuItem.update({
+        const updatedItem = await prisma.menuItem.update({
             where: { id },
             data,
-            include: {category: true}
+            include: { category: true }
         })
 
         res.status(200).json(updateItem);
+    } catch (error) {
+        handleUserError(error, res);
+    }
+}
+
+export async function deleteItem(req:Request, res: Response): Promise<void> {
+    try {
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id)) {
+            res.status(400).json({  message: "Invalid item ID" });
+            return;
+        }
+
+        const valid = await prisma.menuItem.findUnique({ where: { id } });
+        if (!valid) {
+            res.status(400).json({ message: "Item does not exist" });
+            return;
+        }
+
+        await prisma.menuItem.delete({ where: { id } });
+        res.status(204).send;
+
+    } catch (error) {
+        handleUserError(error, res);
+    }
+};
+
+export async function getItems(req: Request, res: Response): Promise<void> {
+    try {
+        const items = await prisma.menuItem.findMany({
+            orderBy: { id: "asc" },
+            include: { category: true }
+        })
+
+        if (!items) {
+            res.status(400).json({ messsage: "No items in database" });
+            return;
+        }
+
+        res.json(items);
+    } catch (error) {
+        handleUserError(error, res);
+    }
+}
+
+export async function getItemById(req: Request, res: Response): Promise<void> {
+    try {
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id)) {
+            res.status(400).json({  message: "Invalid user ID" });
+            return;
+        }
+
+        const user = prisma.menuItem.findUnique({ where: { id }});
+        if (!user) {
+            res.status(400).json({ message: "Item does not exist" })
+        }
+
+        res.json(user);
+
     } catch (error) {
         handleUserError(error, res);
     }
@@ -118,7 +178,7 @@ export async function createCategory(req: Request, res: Response): Promise<void>
             return;
         }
 
-        const category = prisma.menuCategory.create({
+        const category = await prisma.menuCategory.create({
             data: {
                 name,
                 slug,
@@ -132,5 +192,5 @@ export async function createCategory(req: Request, res: Response): Promise<void>
         handleUserError(error, res);
     }
     
-}
+};
 
