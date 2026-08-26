@@ -177,7 +177,7 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
             select: userSafeSelect,
         });
 
-        res.json(updatedUser);
+        res.status(200).json(updatedUser);
 
     } catch (error) {
         handleUserError(error, res);
