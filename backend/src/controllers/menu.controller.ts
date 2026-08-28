@@ -4,7 +4,7 @@ import { Prisma } from "../generated/prisma/client.js";
 import { z } from "zod"
 
 const itemSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
   description: z.string().optional(),
   price: z.coerce.number().positive(),
   isAvailable: z.boolean().optional(),
@@ -159,12 +159,13 @@ export async function getItemById(req: Request, res: Response): Promise<void> {
             return;
         };
 
-        const user = prisma.menuItem.findUnique({ where: { id }});
-        if (!user) {
+        const item = await prisma.menuItem.findUnique({ where: { id }});
+        if (!item) {
             res.status(400).json({ message: "Item does not exist" })
+            return;
         };
 
-        res.json(user);
+        res.json(item);
 
     } catch (error) {
         handleUserError(error, res);
@@ -267,9 +268,9 @@ export async function deleteCategory(req: Request, res: Response): Promise<void>
     }
 }
 
-export async function getCategories(req: Request, res: Response): Promise<void> {
+export async function getCategories(_req: Request, res: Response): Promise<void> {
     try {
-        const categories = prisma.menuCategory.findMany({ orderBy: { id: "asc" } })
+        const categories = await prisma.menuCategory.findMany({ orderBy: { id: "asc" } })
         if (!categories) {
             res.status(400).json({ message: "No categories exist in database" })
             return;
@@ -289,9 +290,10 @@ export async function getCategoryById(req: Request, res: Response): Promise<void
             return;
         }
 
-        const category = prisma.menuCategory.findUnique({ where: { id } });
-        if (!id) {
+        const category = await prisma.menuCategory.findUnique({ where: { id } });
+        if (!category) {
             res.status(400).json({ message: "Category does not exist" });
+            return;
         }
 
         res.json(category);
