@@ -66,8 +66,8 @@ model OrderItem {
 
 model Order {
   id            Int         @id @default(autoincrement())
-  customerName  String?
-  customerPhone String?
+  customerName  String
+  customerPhone String
   status        OrderStatus @default(PENDING)
   totalPrice    Decimal     @db.Decimal(10, 2)
 
