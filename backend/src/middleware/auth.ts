@@ -13,7 +13,7 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
             return;
         }
 
-        const token = authHeader?.substring(7);
+        const token = authHeader.substring(7);
 
         const decoded = verifyToken(token);
 
@@ -43,5 +43,34 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction): v
     next();
 }
 
-// export function attachUserIfPresent
+export function attachUserIfPresent(req: Request, res: Response, next: NextFunction): void {
+    try {
+        const authHeader = req.headers.authorization;
+
+        // If there is no header then continue as guest
+        if (!authHeader) {
+            next();
+            return;
+        }
+
+        const token = authHeader.substring(7);
+        const decoded = verifyToken(token);
+
+        req.user = decoded;
+
+        next();
+
+    } catch (error) {
+        if (error instanceof Error && error.name === "JsonWebTokenError") {
+            res.status(401).json({ error: "Invalid token." });
+            return;
+        }
+        if (error instanceof Error && error.name === "TokenExpiredError") {
+            res.status(401).json({ error: "Token has expired." });
+            return;
+        }
+        res.status(500).json({ error: "Authentication failed." });
+        return;
+    }
+}
 

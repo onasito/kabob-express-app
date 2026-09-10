@@ -72,6 +72,8 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
 
         }
 
+        const userId = req.user?.userId
+
         const newOrder = await prisma.order.create({
             data: {
                 customerName,
