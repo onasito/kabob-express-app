@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
 import { prisma } from "../lib/prisma.js";
 import { Prisma } from "../generated/prisma/client.js";
+import { OrderStatus } from "../generated/prisma/enums.js";
 import { z } from "zod";
 
 const orderItemSchema = z.object({
-    menuItemId: z.number(),
+    menuItemId: z.number().int().positive(),
     quantity: z.number().int().positive(),
 })
 
@@ -13,6 +14,12 @@ const orderSchema = z.object({
     customerPhone: z.string().min(1),
     items: z.array(orderItemSchema).min(1),
 })
+
+const updateOrderSchema = z.object({
+    status: z.enum(OrderStatus),
+})
+
+const terminalStatuses: Array<OrderStatus> = [OrderStatus.COMPLETED, OrderStatus.CANCELLED];
 
 type resolvedOrderItem = {
     menuItemId: number,
@@ -28,11 +35,11 @@ export async function createOrderItem(menuItemId: number, quantity: number): Pro
     const menuItem = await prisma.menuItem.findUnique({ where: { id: menuItemId }});
     if (!menuItem) {
         return { success: false, reason: "NOT_FOUND" };
-    };
+    }
 
     if (!menuItem.isAvailable) {
         return { success: false, reason: "UNAVAILABLE" };
-    };
+    }
 
     const data = {
         menuItemId,
@@ -72,19 +79,18 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
 
         }
 
-        const userId = req.user?.userId
-
         const newOrder = await prisma.order.create({
             data: {
                 customerName,
                 customerPhone,
+                userId: req.user?.userId ?? null,
                 items: {
                     create: verifiedItems
                 },
                 totalPrice
             },
             include: { items: true }
-        });
+        })
 
         res.status(201).json(newOrder);
 
@@ -92,7 +98,84 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         console.error(error);
         res.status(500).json({ message: "Something went wrong" });
     }
+}
 
+export async function getOrders(req: Request, res: Response): Promise<void> {
+    try {
+        const orders = await prisma.order.findMany({
+            orderBy: { id: 'asc' }
+        })
 
+        res.json(orders);
 
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
+export async function getOrderById(req: Request, res: Response): Promise<void> {
+    try {
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id)) {
+            res.status(400).json({ message: "Invalid order ID" });
+            return;
+        }
+
+        const order = await prisma.order.findUnique({ 
+            where: { id },
+            include: { items: true }
+        })
+
+        if (!order) {
+            res.status(404).json({ message: "No order was found"});
+            return;
+        }
+
+        res.json(order);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
+export async function updateOrder(req: Request, res: Response): Promise<void> {
+    try {
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id)) {
+            res.status(400).json({ message: "Invalid order ID" });
+            return;
+        }
+
+        const result = updateOrderSchema.safeParse(req.body);
+        if (!result.success) {
+            res.status(400).json({ message: result.error.issues[0]?.message });
+            return;
+        }
+
+        const { status } = result.data;
+
+        const existingOrder = await prisma.order.findUnique({ where: { id } });
+        if (!existingOrder) {
+            res.status(404).json({ message: "No order was found" });
+            return;
+        }
+
+        if (terminalStatuses.includes(existingOrder.status)) {
+            res.status(400).json({ message: `Order is already ${existingOrder.status} and can no longer be updated` });
+            return;
+        }
+
+        const updatedOrder = await prisma.order.update({
+            where: { id },
+            data: { status },
+        })
+
+        res.json(updatedOrder);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
 }
