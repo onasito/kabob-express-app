@@ -2,6 +2,7 @@ import express from 'express';
 import userRouter from './routes/user.routes.js'
 import authRouter from './routes/auth.routes.js'
 import menuRouter from './routes/menu.routes.js'
+import orderRouter from './routes/order.routes.js'
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(userRouter);
 app.use(menuRouter);
+app.use(orderRouter);
 
 
 app.get('/' ,(req, res) => {
