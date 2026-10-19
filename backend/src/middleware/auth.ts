@@ -1,6 +1,7 @@
 import { verifyToken } from "../utils/jwt.js";
 import type { NextFunction } from "express";
 import type { Request, Response } from "express";
+import type { UserRole } from "../generated/prisma/enums.js";
 
 export function authenticate(req: Request, res: Response, next: NextFunction): void {
     try {
@@ -34,13 +35,16 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
     }
 }
 
+// Returns a middleware that only lets through users whose role is in `roles`.
 // Must run after `authenticate` so req.user is populated.
-export function requireAdmin(req: Request, res: Response, next: NextFunction): void {
-    if (req.user?.role !== "ADMIN") {
-        res.status(403).json({ error: "Admin access required." });
-        return;
-    }
-    next();
+export function requireRole(...roles: UserRole[]) {
+    return function (req: Request, res: Response, next: NextFunction): void {
+        if (!req.user || !roles.includes(req.user.role)) {
+            res.status(403).json({ error: "You do not have permission to access this resource." });
+            return;
+        }
+        next();
+    };
 }
 
 export function attachUserIfPresent(req: Request, res: Response, next: NextFunction): void {

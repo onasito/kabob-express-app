@@ -1,10 +1,11 @@
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import type { StringValue } from "ms"
+import type { UserRole } from "../generated/prisma/enums.js";
 import 'dotenv/config';
 
 export interface TokenPayload {
     userId: number
-    role: string
+    role: UserRole
 }
 
 export function signToken(payload: TokenPayload): string {
