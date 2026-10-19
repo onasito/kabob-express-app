@@ -21,17 +21,17 @@ const updateOrderSchema = z.object({
 
 const terminalStatuses: Array<OrderStatus> = [OrderStatus.COMPLETED, OrderStatus.CANCELLED];
 
-type resolvedOrderItem = {
+type ResolvedOrderItem = {
     menuItemId: number,
     quantity: number,
     price: Prisma.Decimal
 }
 
-type CreateOrderItemResult =
-    | { success: true, data: resolvedOrderItem }
+type ResolveOrderItemResult =
+    | { success: true, data: ResolvedOrderItem }
     | { success: false, reason: "NOT_FOUND" | "UNAVAILABLE" }
 
-export async function createOrderItem(menuItemId: number, quantity: number): Promise<CreateOrderItemResult> {
+async function resolveOrderItem(menuItemId: number, quantity: number): Promise<ResolveOrderItemResult> {
     const menuItem = await prisma.menuItem.findUnique({ where: { id: menuItemId }});
     if (!menuItem) {
         return { success: false, reason: "NOT_FOUND" };
@@ -61,12 +61,12 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
 
         const {customerName, customerPhone, items} = result.data;
 
-        const verifiedItems: Array<resolvedOrderItem> = [];
+        const verifiedItems: Array<ResolvedOrderItem> = [];
         let totalPrice: Prisma.Decimal = new Prisma.Decimal(0)
 
         for (const item of items) {
             // No need to check for menuItemId and quantity here because ZOD takes care of it
-            const validatedItem = await createOrderItem(item.menuItemId, item.quantity);
+            const validatedItem = await resolveOrderItem(item.menuItemId, item.quantity);
 
             if (!validatedItem.success) {
                 res.status(400).json({ message: validatedItem.reason })
