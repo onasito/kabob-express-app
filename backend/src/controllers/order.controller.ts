@@ -140,6 +140,28 @@ export async function getOrderById(req: Request, res: Response): Promise<void> {
     }
 }
 
+// Must run after `authenticate` so req.user is populated.
+export async function getMyOrders(req: Request, res: Response): Promise<void> {
+    try {
+        if (!req.user) {
+            res.status(401).json({ message: "Authentication required" });
+            return;
+        }
+
+        const orders = await prisma.order.findMany({
+            where: { userId: req.user.userId },
+            include: { items: true },
+            orderBy: { createdAt: "desc" }
+        })
+
+        res.json(orders);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
 export async function updateOrder(req: Request, res: Response): Promise<void> {
     try {
         const id = Number(req.params.id);
