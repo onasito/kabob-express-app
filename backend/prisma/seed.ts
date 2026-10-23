@@ -1,5 +1,6 @@
 // Must be the first import so DATABASE_URL is loaded before the Prisma client is created
 import "dotenv/config";
+import bcrypt from "bcrypt";
 import { prisma } from "../src/lib/prisma.js";
 
 type SeedItem = {
@@ -109,6 +110,27 @@ const menu: SeedCategory[] = [
 
 // Safe to run more than once: existing rows are updated instead of duplicated
 async function main(): Promise<void> {
+    const email = process.env.ADMIN_EMAIL;
+    const password = process.env.ADMIN_PASSWORD;
+
+    // Fail loudly instead of creating an admin with a missing email or password
+    if (!email || !password) {
+        throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env");
+    }
+
+    // Hash like register does, otherwise login's bcrypt.compare will reject it
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // email is @unique, so Prisma can upsert on it directly.
+    // update keeps the existing admin in sync with .env if the password changes
+    await prisma.user.upsert({
+        where: { email },
+        update: { password: hashedPassword, role: "ADMIN" },
+        create: { name: "Admin", email, password: hashedPassword, role: "ADMIN" },
+    });
+
+    console.log(`Seeded admin ${email}`);
+
     for (const category of menu) {
         // slug is @unique, so Prisma can upsert on it directly
         const savedCategory = await prisma.menuCategory.upsert({
