@@ -140,6 +140,69 @@ export async function getOrderById(req: Request, res: Response): Promise<void> {
     }
 }
 
+// Must run after `authenticate` so req.user is populated.
+export async function getMyOrders(req: Request, res: Response): Promise<void> {
+    try {
+        if (!req.user) {
+            res.status(401).json({ message: "Authentication required" });
+            return;
+        }
+
+        const orders = await prisma.order.findMany({
+            where: { userId: req.user.userId },
+            include: { items: true },
+            orderBy: { createdAt: "desc" }
+        })
+
+        res.json(orders);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
+// Public route: having the token is the proof, so only return what a guest needs (no userId or customerPhone)
+export async function getOrderByTracking(req: Request, res: Response): Promise<void> {
+    try {
+        // Express types params as string | string[], so narrow it before querying
+        const { token } = req.params;
+        if (typeof token !== "string") {
+            res.status(404).json({ message: "No order was found" });
+            return;
+        }
+
+        const order = await prisma.order.findUnique({
+            where: { trackingToken: token },
+            select: {
+                customerName: true,
+                status: true,
+                totalPrice: true,
+                createdAt: true,
+                items: {
+                    select: {
+                        quantity: true,
+                        price: true,
+                        menuItem: { select: { name: true } }
+                    }
+                }
+            }
+        })
+
+        // Same 404 for malformed and unknown tokens so nothing hints at what a valid token looks like
+        if (!order) {
+            res.status(404).json({ message: "No order was found" });
+            return;
+        }
+
+        res.json(order);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+}
+
 export async function updateOrder(req: Request, res: Response): Promise<void> {
     try {
         const id = Number(req.params.id);
