@@ -1,7 +1,15 @@
 import { Router } from "express";
 import {
-    createCategory, updateCategory, deleteCategory, getCategories, getCategoryById, createItem,
-    updateItem, deleteItem, getItems, getItemById
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  getCategories,
+  getCategoryById,
+  createItem,
+  updateItem,
+  deleteItem,
+  getItems,
+  getItemById,
 } from "../controllers/menu.controller.js";
 import { authenticate, requireRole } from "../middleware/auth.js";
 
@@ -9,8 +17,18 @@ const router = Router();
 
 // Categories
 router.post("/categories", authenticate, requireRole("ADMIN"), createCategory);
-router.patch("/categories/:id", authenticate, requireRole("ADMIN"), updateCategory);
-router.delete("/categories/:id", authenticate, requireRole("ADMIN"), deleteCategory);
+router.patch(
+  "/categories/:id",
+  authenticate,
+  requireRole("ADMIN"),
+  updateCategory,
+);
+router.delete(
+  "/categories/:id",
+  authenticate,
+  requireRole("ADMIN"),
+  deleteCategory,
+);
 router.get("/categories", getCategories);
 router.get("/categories/:id", getCategoryById);
 
