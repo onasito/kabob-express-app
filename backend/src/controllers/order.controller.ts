@@ -19,10 +19,7 @@ const updateOrderSchema = z.object({
   status: z.enum(OrderStatus),
 });
 
-const terminalStatuses: Array<OrderStatus> = [
-  OrderStatus.COMPLETED,
-  OrderStatus.CANCELLED,
-];
+const terminalStatuses: Array<OrderStatus> = [OrderStatus.COMPLETED, OrderStatus.CANCELLED];
 
 type ResolvedOrderItem = {
   menuItemId: number;
@@ -31,13 +28,9 @@ type ResolvedOrderItem = {
 };
 
 type ResolveOrderItemResult =
-  | { success: true; data: ResolvedOrderItem }
-  | { success: false; reason: "NOT_FOUND" | "UNAVAILABLE" };
+  { success: true; data: ResolvedOrderItem } | { success: false; reason: "NOT_FOUND" | "UNAVAILABLE" };
 
-async function resolveOrderItem(
-  menuItemId: number,
-  quantity: number,
-): Promise<ResolveOrderItemResult> {
+async function resolveOrderItem(menuItemId: number, quantity: number): Promise<ResolveOrderItemResult> {
   const menuItem = await prisma.menuItem.findUnique({
     where: { id: menuItemId },
   });
@@ -73,19 +66,14 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
 
     for (const item of items) {
       // No need to check for menuItemId and quantity here because ZOD takes care of it
-      const validatedItem = await resolveOrderItem(
-        item.menuItemId,
-        item.quantity,
-      );
+      const validatedItem = await resolveOrderItem(item.menuItemId, item.quantity);
 
       if (!validatedItem.success) {
         res.status(400).json({ message: validatedItem.reason });
         return;
       }
 
-      totalPrice = totalPrice.plus(
-        validatedItem.data.price.times(validatedItem.data.quantity),
-      );
+      totalPrice = totalPrice.plus(validatedItem.data.price.times(validatedItem.data.quantity));
 
       verifiedItems.push(validatedItem.data);
     }
@@ -170,10 +158,7 @@ export async function getMyOrders(req: Request, res: Response): Promise<void> {
 }
 
 // Public route: having the token is the proof, so only return what a guest needs (no userId or customerPhone)
-export async function getOrderByTracking(
-  req: Request,
-  res: Response,
-): Promise<void> {
+export async function getOrderByTracking(req: Request, res: Response): Promise<void> {
   try {
     // Express types params as string | string[], so narrow it before querying
     const { token } = req.params;
@@ -235,11 +220,9 @@ export async function updateOrder(req: Request, res: Response): Promise<void> {
     }
 
     if (terminalStatuses.includes(existingOrder.status)) {
-      res
-        .status(400)
-        .json({
-          message: `Order is already ${existingOrder.status} and can no longer be updated`,
-        });
+      res.status(400).json({
+        message: `Order is already ${existingOrder.status} and can no longer be updated`,
+      });
       return;
     }
 

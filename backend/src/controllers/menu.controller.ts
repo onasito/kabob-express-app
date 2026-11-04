@@ -45,9 +45,7 @@ export async function createItem(req: Request, res: Response): Promise<void> {
     const { name, description, price, isAvailable, categoryId } = result.data;
 
     if (!name || price === undefined || !Number.isInteger(categoryId)) {
-      res
-        .status(400)
-        .json({ message: "Name, price, and categoryId are required" });
+      res.status(400).json({ message: "Name, price, and categoryId are required" });
       return;
     }
 
@@ -175,10 +173,7 @@ export async function getItemById(req: Request, res: Response): Promise<void> {
 
 // ============== MENU CATEGORIES CONTROLLERS ==============
 
-export async function createCategory(
-  req: Request,
-  res: Response,
-): Promise<void> {
+export async function createCategory(req: Request, res: Response): Promise<void> {
   try {
     const result = categorySchema.safeParse(req.body);
     if (!result.success) {
@@ -202,10 +197,7 @@ export async function createCategory(
   }
 }
 
-export async function updateCategory(
-  req: Request,
-  res: Response,
-): Promise<void> {
+export async function updateCategory(req: Request, res: Response): Promise<void> {
   try {
     const result = categorySchema.partial().safeParse(req.body);
     if (!result.success) {
@@ -243,10 +235,7 @@ export async function updateCategory(
   }
 }
 
-export async function deleteCategory(
-  req: Request,
-  res: Response,
-): Promise<void> {
+export async function deleteCategory(req: Request, res: Response): Promise<void> {
   try {
     const id = Number(req.params.id);
     if (!Number.isInteger(id)) {
@@ -264,12 +253,9 @@ export async function deleteCategory(
     }
 
     if (category._count.items > 0) {
-      res
-        .status(400)
-        .json({
-          message:
-            "Cannot delete a category that still has menu items assigned to it",
-        });
+      res.status(400).json({
+        message: "Cannot delete a category that still has menu items assigned to it",
+      });
       return;
     }
 
@@ -280,10 +266,7 @@ export async function deleteCategory(
   }
 }
 
-export async function getCategories(
-  _req: Request,
-  res: Response,
-): Promise<void> {
+export async function getCategories(_req: Request, res: Response): Promise<void> {
   try {
     const categories = await prisma.menuCategory.findMany({
       orderBy: { id: "asc" },
@@ -299,10 +282,7 @@ export async function getCategories(
   }
 }
 
-export async function getCategoryById(
-  req: Request,
-  res: Response,
-): Promise<void> {
+export async function getCategoryById(req: Request, res: Response): Promise<void> {
   try {
     const id = Number(req.params.id);
     if (!Number.isInteger(id)) {

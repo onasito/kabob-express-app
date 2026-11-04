@@ -35,32 +35,27 @@ const menu: SeedCategory[] = [
       },
       {
         name: "Kofta Kabob",
-        description:
-          "Skewers of lean ground beef marinated in fresh grated spices.",
+        description: "Skewers of lean ground beef marinated in fresh grated spices.",
         price: "18.95",
       },
       {
         name: "Lamb Kabob",
-        description:
-          "Chunks of lamb marinated in fresh grated spices.Served with rice, salad and fresh bread.",
+        description: "Chunks of lamb marinated in fresh grated spices.Served with rice, salad and fresh bread.",
         price: "18.95",
       },
       {
         name: "Sultani Kabob",
-        description:
-          "Combination of Beef Tikka and Kofta. Served with rice, salad and fresh bread.",
+        description: "Combination of Beef Tikka and Kofta. Served with rice, salad and fresh bread.",
         price: "19.95",
       },
       {
         name: "Chicken Sultani",
-        description:
-          "Combination Chicken Breast and Kofta. Served with rice, salad and fresh bread.",
+        description: "Combination Chicken Breast and Kofta. Served with rice, salad and fresh bread.",
         price: "18.95",
       },
       {
         name: "Chicken Beef Sultani",
-        description:
-          "Combination of Chicken Breast and Beef Tikka. Served with rice, salad and fresh bread.",
+        description: "Combination of Chicken Breast and Beef Tikka. Served with rice, salad and fresh bread.",
         price: "20.95",
       },
       {
@@ -70,20 +65,17 @@ const menu: SeedCategory[] = [
       },
       {
         name: "King Sultani",
-        description:
-          "Combination of Tikka, Kofta, and chicken. Served with rice, salad and fresh bread.",
+        description: "Combination of Tikka, Kofta, and chicken. Served with rice, salad and fresh bread.",
         price: "23.95",
       },
       {
         name: "Broni Badenjan (Eggplant)",
-        description:
-          "Cooked eggplant with layers of fresh tomato and yogurt. Served with rice, salad and fresh bread.",
+        description: "Cooked eggplant with layers of fresh tomato and yogurt. Served with rice, salad and fresh bread.",
         price: "16.95",
       },
       {
         name: "Fish Kabob",
-        description:
-          "Tilapia marinated in freshly grated spices and served with rice, salad and fresh bread.",
+        description: "Tilapia marinated in freshly grated spices and served with rice, salad and fresh bread.",
         price: "16.95",
       },
       {
@@ -94,8 +86,7 @@ const menu: SeedCategory[] = [
       },
       {
         name: "Chicken kofta",
-        description:
-          "Two skewers of succulent ground chicken wrapped along a skewer served with rice, salad and naan.",
+        description: "Two skewers of succulent ground chicken wrapped along a skewer served with rice, salad and naan.",
         price: "14.95",
       },
       {

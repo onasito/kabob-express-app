@@ -47,10 +47,7 @@ export async function login(req: Request, res: Response): Promise<void> {
       select: { ...userSafeSelect, password: true },
     });
 
-    const valid = bcrypt.compareSync(
-      password,
-      userWithPassword?.password ?? DUMMY_PASSWORD_HASH,
-    );
+    const valid = bcrypt.compareSync(password, userWithPassword?.password ?? DUMMY_PASSWORD_HASH);
     if (!userWithPassword || !valid) {
       res.status(400).json({ message: "Invalid email or password" });
       return;

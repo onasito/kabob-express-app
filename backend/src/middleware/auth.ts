@@ -3,11 +3,7 @@ import type { NextFunction } from "express";
 import type { Request, Response } from "express";
 import type { UserRole } from "../generated/prisma/enums.js";
 
-export function authenticate(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void {
+export function authenticate(req: Request, res: Response, next: NextFunction): void {
   try {
     const authHeader = req.headers.authorization;
 
@@ -44,20 +40,14 @@ export function authenticate(
 export function requireRole(...roles: UserRole[]) {
   return function (req: Request, res: Response, next: NextFunction): void {
     if (!req.user || !roles.includes(req.user.role)) {
-      res
-        .status(403)
-        .json({ error: "You do not have permission to access this resource." });
+      res.status(403).json({ error: "You do not have permission to access this resource." });
       return;
     }
     next();
   };
 }
 
-export function attachUserIfPresent(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void {
+export function attachUserIfPresent(req: Request, res: Response, next: NextFunction): void {
   try {
     const authHeader = req.headers.authorization;
 

@@ -17,18 +17,8 @@ const router = Router();
 
 // Categories
 router.post("/categories", authenticate, requireRole("ADMIN"), createCategory);
-router.patch(
-  "/categories/:id",
-  authenticate,
-  requireRole("ADMIN"),
-  updateCategory,
-);
-router.delete(
-  "/categories/:id",
-  authenticate,
-  requireRole("ADMIN"),
-  deleteCategory,
-);
+router.patch("/categories/:id", authenticate, requireRole("ADMIN"), updateCategory);
+router.delete("/categories/:id", authenticate, requireRole("ADMIN"), deleteCategory);
 router.get("/categories", getCategories);
 router.get("/categories/:id", getCategoryById);
 
