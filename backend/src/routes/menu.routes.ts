@@ -1,7 +1,15 @@
 import { Router } from "express";
 import {
-    createCategory, updateCategory, deleteCategory, getCategories, getCategoryById, createItem,
-    updateItem, deleteItem, getItems, getItemById
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  getCategories,
+  getCategoryById,
+  createItem,
+  updateItem,
+  deleteItem,
+  getItems,
+  getItemById,
 } from "../controllers/menu.controller.js";
 import { authenticate, requireRole } from "../middleware/auth.js";
 

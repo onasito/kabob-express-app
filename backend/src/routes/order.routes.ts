@@ -1,8 +1,15 @@
 import { Router } from "express";
-import { createOrder, getOrderById, getOrders, updateOrder, getMyOrders, getOrderByTracking } from "../controllers/order.controller.js";
+import {
+  createOrder,
+  getOrderById,
+  getOrders,
+  updateOrder,
+  getMyOrders,
+  getOrderByTracking,
+} from "../controllers/order.controller.js";
 import { attachUserIfPresent, authenticate, requireRole } from "../middleware/auth.js";
 
-const router = Router()
+const router = Router();
 
 router.post("/orders", attachUserIfPresent, createOrder);
 router.get("/orders/me", authenticate, getMyOrders);
