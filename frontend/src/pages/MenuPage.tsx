@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { type MenuCategory } from "../types";
 import menuService from "../services/menu";
+import Header from "../components/Header";
 import "./MenuPage.css";
 
 function MenuPage() {
@@ -46,4 +47,10 @@ function MenuPage() {
       </div>
     );
   }
+
+  return (
+    <Header></Header>
+  )
 }
+
+export default MenuPage;
