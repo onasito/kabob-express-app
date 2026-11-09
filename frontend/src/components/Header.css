@@ -1,8 +1,61 @@
 .header {
-  background-color: #2e7d32;
-  padding: 0 20px;
   position: sticky;
+  padding: 0 1rem;
   top: 0;
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  justify-content: left;
+  flex: 50%;
+}
+
+.kabob-pic {
+  height: 80%;
+  width: 165px;
+}
+
+.nav {
+  display: flex;
+  justify-content: right;
+  flex: 40%;
+}
+
+.nav a {
+  margin-right: 20px;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+  transition: 0.4ms;
+  color: red;
+}
+
+.icon-links {
+  display: flex;
+  justify-content: right;
+  flex: 10%;
+}
+
+.icon-links a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.basket-icon {
+  color: whitesmoke;
+  margin-right: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.avatar-icon {
+  height: 20px;
+  width: 20px;
 }

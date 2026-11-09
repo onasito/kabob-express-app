@@ -48,9 +48,7 @@ function MenuPage() {
     );
   }
 
-  return (
-    <Header></Header>
-  )
+  return <div>Coming Soon</div>;
 }
 
 export default MenuPage;
