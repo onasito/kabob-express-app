@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { type MenuCategory } from "../types";
 import menuService from "../services/menu";
-import Header from "../components/Header";
+import MenuItemCard from "../components/MenuItemCard";
 import "./MenuPage.css";
 
 function MenuPage() {
@@ -48,7 +48,30 @@ function MenuPage() {
     );
   }
 
-  return <div>Coming Soon</div>;
+  return (
+    <main>
+      <header className="header-box">
+        <div className="title-wrapper">
+          <h1>Our Menu</h1>
+          <p>REAL FOOD ... REAL FAST</p>
+        </div>
+        <div className="kabob-pic-wrapper">
+          <img className="grilled-kabob-pic" src="/Grilled-Steak-Kebabs.jpg" />
+        </div>
+      </header>
+      {categories.map((category) => (
+        <div key={category.id}>
+          <h2>{category.name}</h2>
+          <p>{category.description}</p>
+          <div className="category-items">
+            {category.items?.map((item) => (
+              <MenuItemCard key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </main>
+  );
 }
 
 export default MenuPage;

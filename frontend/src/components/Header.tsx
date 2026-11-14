@@ -12,7 +12,6 @@ function Header() {
             <img className="kabob-pic" src="/kabob-logo.png" />
           </Link>
         </nav>
-
         <nav className="nav">
           <Link to={"/home"}>Home</Link>
           <Link to={"/menu"}>Menu</Link>

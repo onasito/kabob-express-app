@@ -2,6 +2,7 @@ export interface MenuCategory {
   id: number;
   name: string;
   slug: string;
+  description: string;
   items?: MenuItem[];
   createdAt: string;
   updatedAt: string;

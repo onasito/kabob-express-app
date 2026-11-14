@@ -9,10 +9,10 @@ const app = express();
 
 app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:5173" }));
 app.use(express.json());
-app.use(authRouter);
-app.use(userRouter);
-app.use(menuRouter);
-app.use(orderRouter);
+app.use("/api/", authRouter);
+app.use("/api/", userRouter);
+app.use("/api/menu", menuRouter);
+app.use("/api/order", orderRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Kabob Express");

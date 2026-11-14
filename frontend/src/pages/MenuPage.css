@@ -1,0 +1,30 @@
+.header-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-box > * {
+  flex: 1;
+}
+
+.title-wrapper {
+  text-align: center;
+}
+
+.kabob-pic-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.grilled-kabob-pic {
+  height: 80px;
+  width: auto;
+}
+
+.category-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 260px);
+  gap: 24px;
+  justify-content: center;
+}
