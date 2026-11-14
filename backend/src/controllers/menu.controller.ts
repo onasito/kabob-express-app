@@ -14,6 +14,7 @@ const itemSchema = z.object({
 const categorySchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
+  description: z.string().min(1),
 });
 
 function handleUserError(error: unknown, res: Response): void {
@@ -181,12 +182,13 @@ export async function createCategory(req: Request, res: Response): Promise<void>
       return;
     }
 
-    const { name, slug } = result.data;
+    const { name, slug, description } = result.data;
 
     const category = await prisma.menuCategory.create({
       data: {
         name,
         slug,
+        description,
       },
       include: { items: true },
     });
@@ -205,7 +207,7 @@ export async function updateCategory(req: Request, res: Response): Promise<void>
       return;
     }
 
-    const { name, slug } = result.data;
+    const { name, slug, description } = result.data;
 
     const id = Number(req.params.id);
     if (!Number.isInteger(id)) {
@@ -222,6 +224,7 @@ export async function updateCategory(req: Request, res: Response): Promise<void>
     const data: Prisma.MenuCategoryUpdateInput = {
       ...(name !== undefined && { name }),
       ...(slug !== undefined && { slug }),
+      ...(description !== undefined && { description }),
     };
 
     const updatedCat = await prisma.menuCategory.update({
@@ -270,6 +273,7 @@ export async function getCategories(_req: Request, res: Response): Promise<void>
   try {
     const categories = await prisma.menuCategory.findMany({
       orderBy: { id: "asc" },
+      include: { items: true },
     });
     if (!categories) {
       res.status(400).json({ message: "No categories exist in database" });
