@@ -49,7 +49,7 @@ function MenuPage() {
   }
 
   return (
-    <main>
+    <main className="page-container">
       <header className="header-box">
         <div className="title-wrapper">
           <h1>Our Menu</h1>
@@ -60,7 +60,8 @@ function MenuPage() {
         </div>
       </header>
       {categories.map((category) => (
-        <div key={category.id}>
+        <div key={category.id} className="category">
+          <div className="divider" />
           <h2>{category.name}</h2>
           <p>{category.description}</p>
           <div className="category-items">

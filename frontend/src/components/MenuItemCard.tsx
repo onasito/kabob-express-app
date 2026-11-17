@@ -9,7 +9,7 @@ type MenuItemCardProps = {
 function MenuItemCard({ item }: MenuItemCardProps) {
   return (
     <article className="card">
-      <img className="item-image" src="/menuImages/beef-tika.avif" />
+      <img className="item-image" src={item.image ?? "/kabob-logo.png"} />
       <div className="card-content">
         <h3 className="item-name">{item.name}</h3>
         <p>{item.description}</p>

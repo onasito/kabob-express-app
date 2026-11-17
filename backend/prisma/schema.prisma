@@ -42,6 +42,7 @@ model MenuItem {
   name        String
   description String?
   price       Decimal @db.Decimal(10, 2)
+  image       String?
   isAvailable Boolean @default(true)
 
   // ✅ Opposite relation field for MenuCategory.items

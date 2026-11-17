@@ -1,15 +1,20 @@
+.page-container {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 .header-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /*display: flex;*/
+  /*align-items: center;*/
+  /*justify-content: center;*/
 }
 
 .header-box > * {
-  flex: 1;
+  /*flex: 1;*/
 }
 
 .title-wrapper {
-  text-align: center;
+  /*text-align: center;*/
 }
 
 .kabob-pic-wrapper {
@@ -22,9 +27,22 @@
   width: auto;
 }
 
+.category h2 {
+  margin-top: 0;    /* remove the browser's default heading margin */
+}
+
+.divider {
+  width: 100%;
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10'%3E%3Cpath fill='none' stroke='%23b91c1c' stroke-width='2' d='M0 5 Q 5 1, 10 5 T 20 5'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 20px 10px;
+  margin: 48px 0;
+}
+
 .category-items {
   display: grid;
   grid-template-columns: repeat(auto-fill, 260px);
   gap: 24px;
-  justify-content: center;
+  /*justify-content: center;*/
 }

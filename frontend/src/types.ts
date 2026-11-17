@@ -13,6 +13,7 @@ export interface MenuItem {
   name: string;
   description: string | null;
   price: string; // Decimal comes as string from API
+  image: string | null;
   isAvailable: boolean;
   categoryId: number;
   category?: MenuCategory;
