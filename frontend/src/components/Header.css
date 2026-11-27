@@ -3,6 +3,8 @@
   padding: 0 1rem;
   top: 0;
   z-index: 100;
+  background-color: rgba(31, 31, 31, 0.8);  /* slightly see-through */
+  backdrop-filter: blur(8px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

@@ -7,6 +7,7 @@ const itemSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   price: z.coerce.number().positive(),
+  image: z.string().optional(),
   isAvailable: z.boolean().optional(),
   categoryId: z.number().int(),
 });
@@ -43,7 +44,7 @@ export async function createItem(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const { name, description, price, isAvailable, categoryId } = result.data;
+    const { name, description, price, image, isAvailable, categoryId } = result.data;
 
     if (!name || price === undefined || !Number.isInteger(categoryId)) {
       res.status(400).json({ message: "Name, price, and categoryId are required" });
@@ -63,6 +64,7 @@ export async function createItem(req: Request, res: Response): Promise<void> {
         name,
         description: description ?? null,
         price,
+        image: image ?? null,
         ...(isAvailable !== undefined && { isAvailable }),
         categoryId,
       },
@@ -91,12 +93,13 @@ export async function updateItem(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const { name, description, price, isAvailable, categoryId } = result.data;
+    const { name, description, price, image, isAvailable, categoryId } = result.data;
 
     const data: Prisma.MenuItemUpdateInput = {
       ...(name !== undefined && { name }),
       ...(description !== undefined && { description }),
       ...(price !== undefined && { price }),
+      ...(image !== undefined && { image }),
       ...(isAvailable !== undefined && { isAvailable }),
       ...(categoryId !== undefined && { categoryId }),
     };

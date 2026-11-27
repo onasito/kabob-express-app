@@ -49,18 +49,25 @@ function MenuPage() {
   }
 
   return (
-    <main>
-      <header className="header-box">
+    <main className="page-container">
+      <header className="menu-hero">
         <div className="title-wrapper">
+          <p className="eyebrow">
+            Real food{" "}
+            <span className="dots" aria-hidden="true">
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
+            </span>{" "}
+            real fast
+          </p>
           <h1>Our Menu</h1>
-          <p>REAL FOOD ... REAL FAST</p>
         </div>
-        <div className="kabob-pic-wrapper">
-          <img className="grilled-kabob-pic" src="/Grilled-Steak-Kebabs.jpg" />
-        </div>
+        <img className="hero-kabob" src="/kebab.png" alt="" />
       </header>
       {categories.map((category) => (
-        <div key={category.id}>
+        <div key={category.id} className="category">
+          <div className="divider" />
           <h2>{category.name}</h2>
           <p>{category.description}</p>
           <div className="category-items">

@@ -1,25 +1,115 @@
-.header-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.page-container {
+  max-width: 1112px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.header-box > * {
-  flex: 1;
+.menu-hero {
+  margin: 24px 0 40px;
+  padding: 40px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  /* wavy lines along the top and bottom, the same squiggle as the dividers */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10'%3E%3Cpath fill='none' stroke='%23b91c1c' stroke-width='2' d='M0 5 Q 5 1, 10 5 T 20 5'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10'%3E%3Cpath fill='none' stroke='%23b91c1c' stroke-width='2' d='M0 5 Q 5 1, 10 5 T 20 5'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: top left, bottom left;
+  background-size: 20px 10px;
 }
 
 .title-wrapper {
-  text-align: center;
+  text-align: left;
 }
 
-.kabob-pic-wrapper {
-  display: flex;
-  justify-content: center;
+.menu-hero h1 {
+  margin: 4px 0 0;
+  font-size: clamp(2.5rem, 6vw, 4.5rem); /* scales with screen size */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: whitesmoke;
 }
 
-.grilled-kabob-pic {
-  height: 80px;
-  width: auto;
+.eyebrow {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: red;
+}
+
+/* Dots appear one by one, hold, then fade out one by one, on a loop */
+.dots span {
+  opacity: 0;
+  animation: dot-blink 2.4s ease-in-out infinite;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes dot-blink {
+  0% {
+    opacity: 0;
+  }
+  15%,
+  70% {
+    opacity: 1;
+  }
+  85%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* No animation for people who prefer less motion: just show the dots */
+@media (prefers-reduced-motion: reduce) {
+  .dots span {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+.hero-kabob {
+  width: 220px;
+  height: auto;
+  flex-shrink: 0;
+  transform: rotate(-12deg);
+}
+
+/* Smaller icon on phones so the title has room */
+@media (max-width: 600px) {
+  .menu-hero {
+    padding: 32px 4px;
+  }
+
+  .hero-kabob {
+    width: 110px;
+  }
+}
+
+/* The header's bottom wave already separates it from the first category */
+.category:first-of-type .divider {
+  display: none;
+}
+
+.category h2 {
+  margin-top: 0; /* remove the browser's default heading margin */
+}
+
+.divider {
+  width: 100%;
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10'%3E%3Cpath fill='none' stroke='%23b91c1c' stroke-width='2' d='M0 5 Q 5 1, 10 5 T 20 5'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 20px 10px;
+  margin: 48px 0;
 }
 
 .category-items {
@@ -27,4 +117,5 @@
   grid-template-columns: repeat(auto-fill, 260px);
   gap: 24px;
   justify-content: center;
+  /*justify-content: center;*/
 }
